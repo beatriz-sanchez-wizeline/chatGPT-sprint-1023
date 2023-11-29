@@ -17,7 +17,7 @@ class Inventionary:
         self._type = None
         self._messages = []
         self._bot = bot
-        logging.basicConfig(level=logging.DEBUG)
+        # logging.basicConfig(level=logging.DEBUG)
 
     def __setup(self):
         self.__user_welcome()
