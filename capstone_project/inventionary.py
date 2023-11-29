@@ -91,7 +91,7 @@ class Inventionary:
         if self._answers is not None and self._type is not None:
 
             # PROMPTS
-            type_and_task_prompt = "Propose 3 names for a {type} taking into consideration the following: \n"
+            type_and_task_prompt = "Propose 3 names for a {type} as a markdown enumerated list. Consider: \n"
             purpose_prompt = "- This is the core purpose of the {type}: {purpose}.\n"
             distinct_prompt = "- This is what sets apart the {type} from competitors: {different}.\n"
             length_prompt = "- The length of the name shall be {length}.\n"
@@ -116,7 +116,6 @@ class Inventionary:
                     + (avoid_prompt.format(type=self._type, avoid=self._answers["avoid"]) if avoid != "" else "")
                     + (include_prompt.format(type=self._type,
                                              include=self._answers["include"]) if include != "" else "")
-                    + "Your response shall exclusively contain a comma separated list of the 3 proposed names."
             )
 
             self._messages.append({"role": "system", "content": "You are a skilled marketing expert"})
@@ -129,10 +128,10 @@ class Inventionary:
             logging.debug("No messages")
             self.__setup()  # Setup and prompt the user for details
         else:
+            self._bot.close_client()
             sys.exit()
 
         logging.debug(self._messages)
-        #response = "word1, word2, word3"
         response = self._bot.request_openai(self._messages)
         self.__process_response(response)
 
@@ -140,30 +139,26 @@ class Inventionary:
             retry_question = inquirer.Confirm(name="retry", message="Would you like to request other name options?",
                                               default=False)
             retry = inquirer.prompt([retry_question])
-            logging.debug("Retry: {retry}".format(retry="True" if retry else "False"))
-            if retry:
+            logging.debug("Retry: {retry}".format(retry="True" if retry['retry'] else "False"))
+            if retry['retry']:
                 self._messages.append({"role": "user", "content": "Propose other 3 names"})
 
                 logging.debug(self._messages)
-                # response = "word1, word2, word3"
                 response = self._bot.request_openai(self._messages)
                 self.__process_response(response)
             else:
+                self._bot.close_client()
                 sys.exit()
 
     def __process_response(self, response):
         logging.debug(response)
-        #logging.debug("Prompt tokens: {tokens)".format(tokens=response["usage"]["prompt_tokens"]))
-        #logging.debug("Completion tokens: {tokens)".format(tokens=response["usage"]["completion_tokens"]))
 
-        #answer = response
-        answer = response["choices"][0]["message"]["content"]
+        answer = response.choices[0].message.content
 
         print("\nProposition:")
-        print("------------")
-        for name in answer.split(","):
-            print(" - {name}".format(name=name.strip()))
-        print("") # line break
+        print("-----------")
+        print(answer)
+        print("")  # line break
 
         self._messages.append({"role": "assistant", "content": answer})
 

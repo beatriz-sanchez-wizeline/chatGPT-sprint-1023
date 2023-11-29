@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 import os
-import openai
+from openai import OpenAI
 from dotenv import load_dotenv
 
 
@@ -16,7 +16,7 @@ class ChatGPT:
         self.api_key = os.getenv("OPENAI_API_KEY")
 
         # Set the retrieved API key for the OpenAI library
-        openai.api_key = self.api_key
+        self.client = OpenAI(api_key=self.api_key)
 
         # A constant to describe the role or behavior of the chatbot
         self.MAIN_ROLE = "This is the behavior of chatGPT"
@@ -26,18 +26,28 @@ class ChatGPT:
         Make a request to the OpenAI API.
 
         Args:
-        - message (str): The message to be sent to the OpenAI API.
-        - role (str, optional): The role associated with the message. Defaults to "system".
+        - messages (array): The list of messages to be sent to the OpenAI API. [{role: <role>, message: <message}, ...]
 
         Returns:
-        - str: The response content from the OpenAI API.
+        - str: The response from the OpenAI API.
         """
 
         # Create a chat completion with the provided message and role
-        return openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",
-            messages=messages
-        )
+        return self.client.chat.completions.create(model="gpt-3.5-turbo", messages=messages)
+
+    def close_client(self):
+        """
+        Make a request to the OpenAI API.
+
+        Args:
+        - messages (array): The list of messages to be sent to the OpenAI API. [{role: <role>, message: <message}, ...]
+
+        Returns:
+        - str: The response from the OpenAI API.
+        """
+
+        # Create a chat completion with the provided message and role
+        return self.client.close()
 
 # If you need to test or use this directly, you can do:
 # if __name__ == "__main__":

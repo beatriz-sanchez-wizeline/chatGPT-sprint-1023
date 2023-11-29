@@ -5,10 +5,6 @@ from inventionary import Inventionary
 
 if __name__ == "__main__":
     bot = ChatGPT()
-    promptBuilder = Inventionary(bot)
-    user_prompt = promptBuilder.start()
-    print(user_prompt)
+    Inventionary(bot).start()
 
-    # bot = ChatGPT()
-    # response = bot.request_openai("You are a skilled marketing expert", "Propose a business name")
-    # print(response)
+
