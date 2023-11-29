@@ -4,8 +4,9 @@ from brain_module import ChatGPT
 from inventionary import Inventionary
 
 if __name__ == "__main__":
-    promptBuilder = Inventionary()
-    user_prompt = promptBuilder.setup()
+    bot = ChatGPT()
+    promptBuilder = Inventionary(bot)
+    user_prompt = promptBuilder.start()
     print(user_prompt)
 
     # bot = ChatGPT()

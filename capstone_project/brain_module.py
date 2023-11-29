@@ -21,7 +21,7 @@ class ChatGPT:
         # A constant to describe the role or behavior of the chatbot
         self.MAIN_ROLE = "This is the behavior of chatGPT"
 
-    def request_openai(self, system_message, user_message):
+    def request_openai(self, messages):
         """
         Make a request to the OpenAI API.
 
@@ -34,19 +34,10 @@ class ChatGPT:
         """
 
         # Create a chat completion with the provided message and role
-        response = openai.ChatCompletion.create(
+        return openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
-            messages=[
-                {"role": "system", "content": system_message},
-                {"role": "user", "content": user_message},
-            ]
+            messages=messages
         )
-
-        print("Prompt tokens: " + response['usage']['prompt_tokens'])
-        print("Completion tokens: " + response['usage']['completion_tokens'])
-
-        # Return the message content from the API response
-        return response["choices"][0]["message"]["content"]
 
 # If you need to test or use this directly, you can do:
 # if __name__ == "__main__":
