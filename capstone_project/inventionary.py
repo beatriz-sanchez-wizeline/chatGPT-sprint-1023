@@ -129,6 +129,7 @@ class Inventionary:
             self.__setup()  # Setup and prompt the user for details
         else:
             self._bot.close_client()
+            print("Hope you liked the inventionary! See ya!")
             sys.exit()
 
         logging.debug(self._messages)
@@ -148,6 +149,7 @@ class Inventionary:
                 self.__process_response(response)
             else:
                 self._bot.close_client()
+                print("Hope you liked the inventionary! See ya!")
                 sys.exit()
 
     def __process_response(self, response):
@@ -172,3 +174,4 @@ class Inventionary:
         print("Welcome to Inventionary! Looking for names for your business or product? You are in the right place!")
         print("Let's get started! Answer the following questions:")
         print("")
+        
