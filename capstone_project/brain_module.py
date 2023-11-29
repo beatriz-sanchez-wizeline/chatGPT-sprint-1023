@@ -4,6 +4,7 @@ import os
 import openai
 from dotenv import load_dotenv
 
+
 class ChatGPT:
     """A class to interact with OpenAI's ChatGPT model."""
 
@@ -20,7 +21,7 @@ class ChatGPT:
         # A constant to describe the role or behavior of the chatbot
         self.MAIN_ROLE = "This is the behavior of chatGPT"
 
-    def request_openai(self, message, role="system"):
+    def request_openai(self, system_message, user_message):
         """
         Make a request to the OpenAI API.
 
@@ -35,8 +36,14 @@ class ChatGPT:
         # Create a chat completion with the provided message and role
         response = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
-            messages=[{"role": role, "content": message}]
+            messages=[
+                {"role": "system", "content": system_message},
+                {"role": "user", "content": user_message},
+            ]
         )
+
+        print("Prompt tokens: " + response['usage']['prompt_tokens'])
+        print("Completion tokens: " + response['usage']['completion_tokens'])
 
         # Return the message content from the API response
         return response["choices"][0]["message"]["content"]

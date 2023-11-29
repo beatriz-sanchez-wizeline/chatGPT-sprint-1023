@@ -10,3 +10,6 @@ tmp/
 
 # Ignore the README.org file
 README.org
+
+capstone_project/.env
+capstone_project/__pycache__/
